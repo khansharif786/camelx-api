@@ -346,6 +346,20 @@ app.get('/races/upcoming', async (req, res) => {
   }
 });
 
+// ── Races by Status ─────────────────────────────────────────
+app.get('/races/by-status', async (req, res) => {
+  try {
+    const rows = await query(
+      `SELECT status, COUNT(*) as count 
+       FROM races 
+       GROUP BY status`
+    );
+    res.json({ race_statuses: rows });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── START SERVER ─────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
