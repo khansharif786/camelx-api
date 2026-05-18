@@ -346,19 +346,23 @@ app.get('/races/upcoming', async (req, res) => {
   }
 });
 
-// ── Races by Status ─────────────────────────────────────────
-app.get('/races/by-status', async (req, res) => {
+// ── Upcoming Races ──────────────────────────────────────────
+app.get('/races/upcoming', async (req, res) => {
   try {
     const rows = await query(
-      `SELECT status, COUNT(*) as count 
-       FROM races 
-       GROUP BY status`
+      `SELECT name, location, race_date, distance, 
+              category, age_category, status, 
+              max_participants, prize_pool
+       FROM races
+       WHERE race_date > NOW()
+       ORDER BY race_date ASC`
     );
-    res.json({ race_statuses: rows });
+    res.json({ upcoming_races: rows, total: rows.length });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
+
 
 // ── START SERVER ─────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
