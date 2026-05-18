@@ -336,24 +336,6 @@ app.get('/races/upcoming', async (req, res) => {
               category, age_category, status, 
               max_participants, prize_pool
        FROM races
-       WHERE status = 'scheduled'
-       AND race_date > NOW()
-       ORDER BY race_date ASC`
-    );
-    res.json({ upcoming_races: rows, total: rows.length });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// ── Upcoming Races ──────────────────────────────────────────
-app.get('/races/upcoming', async (req, res) => {
-  try {
-    const rows = await query(
-      `SELECT name, location, race_date, distance, 
-              category, age_category, status, 
-              max_participants, prize_pool
-       FROM races
        WHERE race_date > NOW()
        ORDER BY race_date ASC`
     );
